@@ -341,7 +341,7 @@
         <strong id="outSpec">Fisioterapia reabilitadora</strong> &nbsp;·&nbsp;
         <span id="outDate"></span>
       </div>
-      <button class="btn btn-secondary" style="font-size:12px;padding:6px 14px" onclick="copyProntuario()">📋 Copiar tudo</button>
+      <button class="btn btn-secondary" style="font-size:12px;padding:6px 14px" onclick="downloadWord()">📄 Baixar Word</button>
     </div>
     <div id="prontuarioContent"></div>
     <div class="feedback-row">
@@ -626,7 +626,201 @@ function copyProntuario() {
   });
 }
 
-function feedback(type) {
+// ── Logo em base64 (carregada uma vez) ──
+let logoBase64 = null;
+
+async function getLogoBase64() {
+  if (logoBase64) return logoBase64;
+  const response = await fetch('logo.png');
+  const blob = await response.blob();
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      logoBase64 = reader.result.split(',')[1];
+      resolve(logoBase64);
+    };
+    reader.readAsDataURL(blob);
+  });
+}
+
+// ── Baixar Word ──
+async function downloadWord() {
+  const btn = event.target;
+  btn.textContent = '⏳ Gerando...';
+  btn.disabled = true;
+
+  try {
+    const blocks = document.querySelectorAll('.prontuario-block');
+    const spec = specLabels[selectedSpec];
+    const dateStr = document.getElementById('outDate').textContent;
+
+    if (!window.docx) {
+      await loadScript('https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js');
+    }
+
+    const { Document, Paragraph, TextRun, ImageRun, AlignmentType, Packer, BorderStyle, Table, TableRow, TableCell, WidthType, VerticalAlign } = window.docx;
+
+    // Tenta carregar a logo
+    let logoImgRun = null;
+    try {
+      const b64 = await getLogoBase64();
+      const binaryStr = atob(b64);
+      const bytes = new Uint8Array(binaryStr.length);
+      for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+      logoImgRun = new ImageRun({
+        data: bytes.buffer,
+        transformation: { width: 70, height: 70 },
+        type: 'png'
+      });
+    } catch(e) { console.warn('Logo não carregada:', e); }
+
+    const children = [];
+
+    // ── Cabeçalho com logo + dados da clínica ──
+    if (logoImgRun) {
+      const headerTable = new Table({
+        width: { size: 100, type: WidthType.PERCENTAGE },
+        borders: {
+          top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.SINGLE, size: 2, color: '8B7355' },
+          left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE },
+          insideH: { style: BorderStyle.NONE }, insideV: { style: BorderStyle.NONE }
+        },
+        rows: [
+          new TableRow({
+            children: [
+              // Coluna logo
+              new TableCell({
+                width: { size: 15, type: WidthType.PERCENTAGE },
+                verticalAlign: VerticalAlign.CENTER,
+                borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } },
+                children: [new Paragraph({ children: [logoImgRun], alignment: AlignmentType.CENTER })]
+              }),
+              // Coluna dados
+              new TableCell({
+                width: { size: 85, type: WidthType.PERCENTAGE },
+                verticalAlign: VerticalAlign.CENTER,
+                borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } },
+                children: [
+                  new Paragraph({ children: [new TextRun({ text: 'Studio Pérola', bold: true, size: 30, color: '5C4A2A' })], alignment: AlignmentType.LEFT }),
+                  new Paragraph({ children: [new TextRun({ text: 'Fisioterapia · Pilates Clínico · Estética Facial', size: 20, color: '8B7355' })], alignment: AlignmentType.LEFT }),
+                  new Paragraph({ children: [new TextRun({ text: 'Jéssica Nunes Rohrs  |  WhatsApp: (49) 98841-8667', size: 19, color: '666666' })], alignment: AlignmentType.LEFT, spacing: { before: 60 } }),
+                ]
+              })
+            ]
+          })
+        ]
+      });
+      children.push(headerTable);
+    } else {
+      // Cabeçalho sem logo
+      children.push(
+        new Paragraph({ children: [new TextRun({ text: 'Studio Pérola', bold: true, size: 30, color: '5C4A2A' })], alignment: AlignmentType.CENTER }),
+        new Paragraph({ children: [new TextRun({ text: 'Fisioterapia · Pilates Clínico · Estética Facial', size: 20, color: '8B7355' })], alignment: AlignmentType.CENTER }),
+        new Paragraph({ children: [new TextRun({ text: 'Jéssica Nunes Rohrs  |  WhatsApp: (49) 98841-8667', size: 19, color: '666666' })], alignment: AlignmentType.CENTER })
+      );
+    }
+
+    // Título do documento
+    children.push(
+      new Paragraph({ spacing: { before: 300 } }),
+      new Paragraph({
+        children: [new TextRun({ text: 'PRONTUÁRIO DE EVOLUÇÃO', bold: true, size: 26, color: '2d6a4f' })],
+        alignment: AlignmentType.CENTER,
+        spacing: { after: 100 }
+      }),
+      new Paragraph({
+        children: [
+          new TextRun({ text: `${spec}`, size: 20, color: '555555' }),
+          new TextRun({ text: `   |   `, size: 20, color: 'aaaaaa' }),
+          new TextRun({ text: `Data: ${dateStr}`, size: 20, color: '555555' })
+        ],
+        alignment: AlignmentType.CENTER,
+        spacing: { after: 360 }
+      })
+    );
+
+    // ── Seções SOAP ──
+    const soapColors = { S: '1a5276', O: '1e8449', A: '6e2f8a', P: 'b03a2e' };
+    const soapFull  = { S: 'S — SUBJETIVO', O: 'O — OBJETIVO', A: 'A — AVALIAÇÃO', P: 'P — PLANO' };
+
+    blocks.forEach(block => {
+      const labelText   = block.querySelector('.soap-label').textContent.trim();
+      const contentText = block.querySelector('.soap-content').textContent.trim();
+      const key   = labelText.charAt(0);
+      const color = soapColors[key] || '333333';
+
+      children.push(
+        new Paragraph({
+          children: [new TextRun({ text: soapFull[key] || labelText, bold: true, size: 22, color })],
+          spacing: { before: 280, after: 80 },
+          border: { bottom: { style: BorderStyle.SINGLE, size: 1, color: 'dddddd' } }
+        }),
+        new Paragraph({
+          children: [new TextRun({ text: contentText, size: 21 })],
+          spacing: { after: 160 }
+        })
+      );
+    });
+
+    // ── Rodapé / Assinatura ──
+    children.push(
+      new Paragraph({
+        children: [new TextRun({ text: ' ', size: 20 })],
+        spacing: { before: 500 },
+        border: { top: { style: BorderStyle.SINGLE, size: 1, color: 'cccccc' } }
+      }),
+      new Paragraph({
+        children: [new TextRun({ text: 'Assinatura do profissional: ________________________________', size: 20, color: '555555' })],
+        spacing: { before: 200 }
+      }),
+      new Paragraph({
+        children: [new TextRun({ text: 'Jéssica Nunes Rohrs — Fisioterapeuta', size: 19, color: '777777' })],
+        spacing: { before: 80 }
+      }),
+      new Paragraph({
+        children: [new TextRun({ text: 'Saudades, Santa Catarina', size: 18, color: '999999' })],
+        spacing: { before: 60 },
+        alignment: AlignmentType.CENTER
+      })
+    );
+
+    const doc = new Document({
+      sections: [{
+        properties: { page: { margin: { top: 1000, right: 1100, bottom: 1000, left: 1100 } } },
+        children
+      }]
+    });
+
+    const blob = await Packer.toBlob(doc);
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    const dateClean = new Date().toISOString().slice(0, 10);
+    a.href     = url;
+    a.download = `prontuario_${selectedSpec}_${dateClean}.docx`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    btn.textContent = '✓ Baixado!';
+    setTimeout(() => { btn.textContent = '📄 Baixar Word'; btn.disabled = false; }, 2000);
+
+  } catch (err) {
+    console.error(err);
+    btn.textContent = '📄 Baixar Word';
+    btn.disabled = false;
+    showError('Erro ao gerar o Word. Tente novamente.');
+  }
+}
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
   const row = document.querySelector('.feedback-row');
   row.innerHTML = type === 'sim'
     ? '<span style="color:#2d6a4f;font-size:14px;font-weight:500">✅ Ótimo! Esse resultado é a base do produto.</span>'
