@@ -7,266 +7,79 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f5f2ee;
-    --surface: #ffffff;
-    --surface2: #f0ece6;
-    --accent: #2d6a4f;
-    --accent2: #40916c;
-    --accent-light: #d8f3dc;
-    --text: #1a1a1a;
-    --text-muted: #6b6560;
-    --border: #e0d9d0;
-    --red: #c1440e;
-    --shadow: 0 2px 20px rgba(0,0,0,0.06);
+    --bg: #f5f2ee; --surface: #ffffff; --surface2: #f0ece6;
+    --accent: #2d6a4f; --accent2: #40916c; --accent-light: #d8f3dc;
+    --text: #1a1a1a; --text-muted: #6b6560; --border: #e0d9d0;
+    --red: #c1440e; --shadow: 0 2px 20px rgba(0,0,0,0.06);
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-  }
-
-  header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 18px 32px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-
-  .logo-icon {
-    width: 36px; height: 36px;
-    background: var(--accent);
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    color: white; font-size: 18px;
-  }
-
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 18px 32px; display: flex; align-items: center; gap: 14px; }
+  .logo-icon { width: 36px; height: 36px; background: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; }
   .logo-text { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--accent); }
   .logo-sub { font-size: 12px; color: var(--text-muted); }
-
-  .badge-proto {
-    margin-left: auto;
-    background: #fff3cd; color: #856404;
-    font-size: 11px; font-weight: 600;
-    padding: 4px 10px; border-radius: 20px;
-    border: 1px solid #ffc107;
-  }
-
-  .container {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 36px 24px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-  }
-
-  @media (max-width: 680px) {
-    .container { grid-template-columns: 1fr; padding: 20px 16px; }
-    header { padding: 14px 16px; }
-  }
-
-  .card {
-    background: var(--surface);
-    border-radius: 16px;
-    padding: 28px;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-  }
-
+  .badge-proto { margin-left: auto; background: #fff3cd; color: #856404; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; border: 1px solid #ffc107; }
+  .container { max-width: 860px; margin: 0 auto; padding: 36px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 680px) { .container { grid-template-columns: 1fr; padding: 20px 16px; } header { padding: 14px 16px; } }
+  .card { background: var(--surface); border-radius: 16px; padding: 28px; box-shadow: var(--shadow); border: 1px solid var(--border); }
   .card.full-width { grid-column: 1 / -1; }
-
   .card-title { font-family: 'DM Serif Display', serif; font-size: 17px; margin-bottom: 6px; }
   .card-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
-
   .specialty-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-
-  .spec-btn {
-    padding: 10px 12px;
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    background: var(--surface2);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px; cursor: pointer;
-    transition: all 0.15s;
-    text-align: left; color: var(--text); font-weight: 500;
-  }
-
+  .spec-btn { padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--surface2); font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; transition: all 0.15s; text-align: left; color: var(--text); font-weight: 500; }
   .spec-btn:hover { border-color: var(--accent2); background: var(--accent-light); }
   .spec-btn.active { border-color: var(--accent); background: var(--accent-light); color: var(--accent); }
   .spec-btn .spec-icon { display: block; font-size: 18px; margin-bottom: 4px; }
-
-  .label {
-    font-size: 12px; font-weight: 600; color: var(--text-muted);
-    text-transform: uppercase; letter-spacing: 0.6px;
-    margin-bottom: 8px; display: block;
-  }
-
-  .record-zone {
-    border: 2px dashed var(--border);
-    border-radius: 12px;
-    padding: 20px 16px;
-    text-align: center;
-    margin-bottom: 14px;
-    transition: all 0.2s;
-    background: var(--surface2);
-  }
-
-  .record-zone.recording {
-    border-color: var(--red);
-    background: #fff5f5;
-    animation: pulse-border 1.2s ease-in-out infinite;
-  }
-
-  @keyframes pulse-border {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(193,68,14,0.15); }
-    50% { box-shadow: 0 0 0 6px rgba(193,68,14,0); }
-  }
-
-  .record-btn {
-    display: inline-flex;
-    align-items: center; gap: 10px;
-    padding: 13px 28px;
-    border-radius: 50px; border: none;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px; font-weight: 600;
-    cursor: pointer; transition: all 0.15s;
-    background: var(--accent); color: white;
-    box-shadow: 0 4px 14px rgba(45,106,79,0.3);
-  }
-
+  .label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; display: block; }
+  .record-zone { border: 2px dashed var(--border); border-radius: 12px; padding: 20px 16px; text-align: center; margin-bottom: 14px; transition: all 0.2s; background: var(--surface2); }
+  .record-zone.recording { border-color: var(--red); background: #fff5f5; animation: pulse-border 1.2s ease-in-out infinite; }
+  @keyframes pulse-border { 0%,100%{box-shadow:0 0 0 0 rgba(193,68,14,0.15);}50%{box-shadow:0 0 0 6px rgba(193,68,14,0);} }
+  .record-btn { display: inline-flex; align-items: center; gap: 10px; padding: 13px 28px; border-radius: 50px; border: none; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s; background: var(--accent); color: white; box-shadow: 0 4px 14px rgba(45,106,79,0.3); }
   .record-btn:hover { background: var(--accent2); transform: translateY(-1px); }
-  .record-btn.recording {
-    background: var(--red);
-    box-shadow: 0 4px 14px rgba(193,68,14,0.3);
-    animation: pulse-btn 1.2s ease-in-out infinite;
-  }
-
-  @keyframes pulse-btn {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.03); }
-  }
-
+  .record-btn.recording { background: var(--red); box-shadow: 0 4px 14px rgba(193,68,14,0.3); animation: pulse-btn 1.2s ease-in-out infinite; }
+  @keyframes pulse-btn { 0%,100%{transform:scale(1);}50%{transform:scale(1.03);} }
   .mic-dot { width: 10px; height: 10px; border-radius: 50%; background: white; }
   .mic-dot.active { animation: blink 0.8s ease-in-out infinite; }
-  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
-
+  @keyframes blink { 0%,100%{opacity:1;}50%{opacity:0.2;} }
   .record-status { font-size: 12px; color: var(--text-muted); margin-top: 10px; min-height: 18px; }
   .record-status.active { color: var(--red); font-weight: 500; }
   .record-timer { font-size: 11px; color: var(--text-muted); margin-top: 4px; font-variant-numeric: tabular-nums; }
-
-  .or-divider {
-    display: flex; align-items: center; gap: 10px;
-    margin: 14px 0; font-size: 12px; color: var(--text-muted);
-  }
-  .or-divider::before, .or-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
-  textarea {
-    width: 100%; min-height: 100px;
-    padding: 14px;
-    border: 1.5px solid var(--border); border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px; line-height: 1.6;
-    resize: vertical; background: var(--surface2); color: var(--text);
-    transition: border-color 0.15s;
-  }
+  .or-divider { display: flex; align-items: center; gap: 10px; margin: 14px 0; font-size: 12px; color: var(--text-muted); }
+  .or-divider::before,.or-divider::after { content:''; flex:1; height:1px; background:var(--border); }
+  textarea { width: 100%; min-height: 100px; padding: 14px; border: 1.5px solid var(--border); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; line-height: 1.6; resize: vertical; background: var(--surface2); color: var(--text); transition: border-color 0.15s; }
   textarea:focus { outline: none; border-color: var(--accent2); background: white; }
   textarea::placeholder { color: #bbb; }
-
   .hint { font-size: 12px; color: var(--text-muted); margin-top: 8px; line-height: 1.5; }
-
-  .btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 12px 24px; border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px; font-weight: 600;
-    cursor: pointer; transition: all 0.15s; border: none;
-  }
-  .btn-primary {
-    background: var(--accent); color: white;
-    width: 100%; justify-content: center; margin-top: 16px;
-  }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s; border: none; }
+  .btn-primary { background: var(--accent); color: white; width: 100%; justify-content: center; margin-top: 16px; }
   .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
   .btn-primary:disabled { background: #ccc; cursor: not-allowed; transform: none; }
-  .btn-secondary {
-    background: var(--surface2); color: var(--text);
-    border: 1.5px solid var(--border); font-size: 13px; padding: 8px 16px;
-  }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 1.5px solid var(--border); font-size: 13px; padding: 8px 16px; }
   .btn-secondary:hover { background: var(--accent-light); border-color: var(--accent2); }
-
   .output-area { display: none; }
   .output-area.visible { display: block; }
-
   .prontuario-block { margin-bottom: 20px; }
-
-  .soap-label {
-    font-size: 11px; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 1px;
-    color: var(--accent); margin-bottom: 6px;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .soap-label::after { content: ''; flex: 1; height: 1px; background: var(--accent-light); }
-
-  .soap-content {
-    font-size: 14px; line-height: 1.7; color: var(--text);
-    background: var(--surface2); padding: 12px 14px;
-    border-radius: 8px; border-left: 3px solid var(--accent-light);
-    white-space: pre-wrap;
-  }
-
-  .output-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
-  }
+  .soap-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+  .soap-label::after { content:''; flex:1; height:1px; background:var(--accent-light); }
+  .soap-content { font-size: 14px; line-height: 1.7; color: var(--text); background: var(--surface2); padding: 12px 14px; border-radius: 8px; border-left: 3px solid var(--accent-light); white-space: pre-wrap; }
+  .output-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
   .output-meta { font-size: 12px; color: var(--text-muted); }
   .output-meta strong { color: var(--text); font-weight: 600; }
-
   .loading { display: none; text-align: center; padding: 40px 20px; color: var(--text-muted); }
   .loading.visible { display: block; }
-  .spinner {
-    width: 32px; height: 32px;
-    border: 3px solid var(--accent-light); border-top-color: var(--accent);
-    border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px;
-  }
+  .spinner { width: 32px; height: 32px; border: 3px solid var(--accent-light); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading-text { font-size: 14px; font-style: italic; }
-
-  .error-box {
-    display: none; background: #fff5f5; border: 1px solid #fca5a5;
-    border-radius: 8px; padding: 12px 16px;
-    font-size: 13px; color: var(--red); margin-top: 12px;
-  }
+  .error-box { display: none; background: #fff5f5; border: 1px solid #fca5a5; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: var(--red); margin-top: 12px; }
   .error-box.visible { display: block; }
-
-  .feedback-row {
-    display: flex; gap: 8px; margin-top: 16px;
-    padding-top: 16px; border-top: 1px solid var(--border); align-items: center;
-  }
+  .feedback-row { display: flex; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); align-items: center; }
   .feedback-label { font-size: 13px; color: var(--text-muted); flex: 1; }
-  .feedback-btn {
-    padding: 6px 14px; border-radius: 20px;
-    border: 1.5px solid var(--border);
-    background: white; font-size: 13px; cursor: pointer; transition: all 0.15s;
-  }
+  .feedback-btn { padding: 6px 14px; border-radius: 20px; border: 1.5px solid var(--border); background: white; font-size: 13px; cursor: pointer; transition: all 0.15s; }
   .feedback-btn.ok:hover { background: var(--accent-light); border-color: var(--accent); }
   .feedback-btn.nok:hover { background: #fff5f5; border-color: var(--red); }
-
-  .info-box {
-    background: var(--accent-light); border-radius: 10px;
-    padding: 14px 16px; font-size: 13px; color: #1b4332; line-height: 1.6;
-  }
+  .info-box { background: var(--accent-light); border-radius: 10px; padding: 14px 16px; font-size: 13px; color: #1b4332; line-height: 1.6; }
   .info-box strong { font-weight: 600; }
-
-  .no-support {
-    background: #fff3cd; border: 1px solid #ffc107;
-    border-radius: 8px; padding: 10px 14px;
-    font-size: 13px; color: #856404; margin-bottom: 12px; display: none;
-  }
+  .no-support { background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #856404; margin-bottom: 12px; display: none; }
 </style>
 </head>
 <body>
@@ -281,34 +94,21 @@
 </header>
 
 <div class="container">
-
   <div class="card">
     <div class="card-title">Área de atendimento</div>
     <div class="card-desc">Selecione a especialidade da sessão para adaptar o prontuário.</div>
     <div class="specialty-grid">
-      <button class="spec-btn active" data-spec="fisio" onclick="selectSpec(this)">
-        <span class="spec-icon">🦴</span>Fisioterapia reabilitadora
-      </button>
-      <button class="spec-btn" data-spec="pilates" onclick="selectSpec(this)">
-        <span class="spec-icon">🧘</span>Pilates clínico
-      </button>
-      <button class="spec-btn" data-spec="estetica" onclick="selectSpec(this)">
-        <span class="spec-icon">✨</span>Estética facial
-      </button>
-      <button class="spec-btn" data-spec="posop" onclick="selectSpec(this)">
-        <span class="spec-icon">🏥</span>Pós-operatório
-      </button>
+      <button class="spec-btn active" data-spec="fisio" onclick="selectSpec(this)"><span class="spec-icon">🦴</span>Fisioterapia reabilitadora</button>
+      <button class="spec-btn" data-spec="pilates" onclick="selectSpec(this)"><span class="spec-icon">🧘</span>Pilates clínico</button>
+      <button class="spec-btn" data-spec="estetica" onclick="selectSpec(this)"><span class="spec-icon">✨</span>Estética facial</button>
+      <button class="spec-btn" data-spec="posop" onclick="selectSpec(this)"><span class="spec-icon">🏥</span>Pós-operatório</button>
     </div>
   </div>
 
   <div class="card">
     <div class="card-title">Relato da sessão</div>
     <div class="card-desc">Grave sua voz ou cole o texto da sessão abaixo.</div>
-
-    <div class="no-support" id="noSupportWarn">
-      ⚠️ Seu navegador não suporta reconhecimento de voz. Use Chrome ou Edge.
-    </div>
-
+    <div class="no-support" id="noSupportWarn">⚠️ Seu navegador não suporta reconhecimento de voz. Use Chrome ou Edge.</div>
     <div class="record-zone" id="recordZone">
       <button class="record-btn" id="recordBtn" onclick="toggleRecording()">
         <div class="mic-dot" id="micDot"></div>
@@ -317,17 +117,12 @@
       <div class="record-status" id="recordStatus">Clique para falar livremente sobre a sessão</div>
       <div class="record-timer" id="recordTimer"></div>
     </div>
-
     <div class="or-divider">ou cole/digite o texto</div>
-
     <label class="label">Texto da sessão</label>
     <textarea id="inputText" placeholder="Ex: Paciente chegou relatando melhora da dor lombar, conseguiu realizar atividades domésticas sem dor. Realizamos mobilização de L4-L5 e exercícios de estabilização..."></textarea>
     <p class="hint">💡 Fale como se descrevesse a sessão para um colega. A IA estrutura o SOAP automaticamente.</p>
-
     <div class="error-box" id="errorBox"></div>
-    <button class="btn btn-primary" id="generateBtn" onclick="generateProntuario()">
-      ✦ Gerar Prontuário SOAP
-    </button>
+    <button class="btn btn-primary" id="generateBtn" onclick="generateProntuario()">✦ Gerar Prontuário SOAP</button>
   </div>
 
   <div class="card full-width loading" id="loadingArea">
@@ -337,10 +132,7 @@
 
   <div class="card full-width output-area" id="outputArea">
     <div class="output-header">
-      <div class="output-meta">
-        <strong id="outSpec">Fisioterapia reabilitadora</strong> &nbsp;·&nbsp;
-        <span id="outDate"></span>
-      </div>
+      <div class="output-meta"><strong id="outSpec"></strong> &nbsp;·&nbsp; <span id="outDate"></span></div>
       <button class="btn btn-secondary" style="font-size:12px;padding:6px 14px" onclick="downloadWord()">📄 Baixar Word</button>
     </div>
     <div id="prontuarioContent"></div>
@@ -352,78 +144,45 @@
   </div>
 
   <div class="card full-width">
-    <div class="info-box">
-      <strong>Como usar para validar:</strong> Grave 5 sessões reais falando livremente. O texto aparece automaticamente no campo. Clique em gerar e avalie se o prontuário seria utilizável. Use 👍 / 👎 para registrar a reação.
-    </div>
+    <div class="info-box"><strong>Como usar para validar:</strong> Grave 5 sessões reais falando livremente. O texto aparece automaticamente no campo. Clique em gerar e avalie se o prontuário seria utilizável. Use 👍 / 👎 para registrar a reação.</div>
   </div>
-
 </div>
 
 <script>
-// ── Estado ──
-let selectedSpec = 'fisio';
-let isRecording = false;
-let recognition = null;
-let timerInterval = null;
-let timerSeconds = 0;
-let accumulatedText = '';
+var selectedSpec = 'fisio';
+var isRecording = false;
+var recognition = null;
+var timerInterval = null;
+var timerSeconds = 0;
+var accumulatedText = '';
+var logoBase64 = null;
 
-// ── Correções de termos técnicos ──
-const termCorrections = {
-  'helicóptero l5': 'L4-L5', 'helicóptero l 5': 'L4-L5', 'helicóptero': 'L4-L5',
-  'l 4 l 5': 'L4-L5', 'l4 l5': 'L4-L5',
-  'l 5 s 1': 'L5-S1', 'l5 s1': 'L5-S1',
-  'c 5 c 6': 'C5-C6', 'c5 c6': 'C5-C6',
-  'a d m': 'ADM', 'amplitude de movimento': 'ADM',
-  'ultra som': 'ultrassom', 'f e s': 'FES',
-  'p g r': 'PGR', 'nr 1': 'NR-1',
+var termCorrections = {
+  'helicóptero l5':'L4-L5','helicóptero l 5':'L4-L5','helicóptero':'L4-L5',
+  'l 4 l 5':'L4-L5','l4 l5':'L4-L5','l 5 s 1':'L5-S1','l5 s1':'L5-S1',
+  'c 5 c 6':'C5-C6','c5 c6':'C5-C6','a d m':'ADM','amplitude de movimento':'ADM',
+  'ultra som':'ultrassom','f e s':'FES'
 };
 
 function applyCorrections(text) {
-  let result = text;
-  for (const [wrong, right] of Object.entries(termCorrections)) {
-    result = result.replace(new RegExp(wrong, 'gi'), right);
+  var result = text;
+  for (var wrong in termCorrections) {
+    result = result.replace(new RegExp(wrong, 'gi'), termCorrections[wrong]);
   }
   return result;
 }
 
-// ── Prompts por especialidade ──
-const systemPrompts = {
-  fisio: `Você é um assistente especializado em documentação clínica para fisioterapia.
-Transforme o relato livre em prontuário SOAP seguindo diretrizes do COFFITO.
-Use linguagem técnica e objetiva. Sinalize com [verificar] quando houver incerteza.
-Responda SOMENTE em JSON sem markdown:
-{"S":"Subjetivo: queixas, sintomas relatados, evolução desde última sessão","O":"Objetivo: achados do exame físico, testes, observações clínicas","A":"Avaliação: análise clínica, diagnóstico funcional","P":"Plano: conduta realizada, técnicas, objetivos próximas sessões, orientações"}`,
-
-  pilates: `Você é um assistente especializado em documentação clínica para Pilates clínico.
-Transforme o relato livre em prontuário SOAP adaptado para Pilates clínico.
-Mencione equipamentos (Reformer, Cadillac, Mat) quando inferível.
-Responda SOMENTE em JSON sem markdown:
-{"S":"Subjetivo: queixas, nível de dor, relato da semana, resposta à sessão anterior","O":"Objetivo: exercícios realizados, equipamentos, séries/repetições, observações posturais","A":"Avaliação: evolução em relação ao objetivo, padrões compensatórios","P":"Plano: progressão proposta, próxima sessão, orientações domiciliares"}`,
-
-  estetica: `Você é um assistente especializado em documentação clínica para fisioterapia estética e dermatofuncional.
-Transforme o relato livre em prontuário SOAP para estética facial.
-Use terminologia dermatofuncional correta.
-Responda SOMENTE em JSON sem markdown:
-{"S":"Subjetivo: queixas estéticas, expectativas, reações desde última sessão","O":"Objetivo: avaliação da pele, procedimentos realizados, parâmetros utilizados","A":"Avaliação: resposta ao tratamento, evolução do quadro estético","P":"Plano: próximo protocolo, cuidados pós-procedimento, orientações"}`,
-
-  posop: `Você é um assistente especializado em documentação clínica para fisioterapia pós-operatória.
-Transforme o relato livre em prontuário SOAP para reabilitação pós-cirúrgica.
-Responda SOMENTE em JSON sem markdown:
-{"S":"Subjetivo: queixas de dor (EVA), limitações funcionais, atividades, medicações","O":"Objetivo: avaliação de edema, ADM, força, cicatriz, recursos utilizados","A":"Avaliação: fase de reabilitação, evolução funcional, aderência ao protocolo","P":"Plano: próxima fase, metas funcionais, exercícios progressivos, restrições"}`
+var systemPrompts = {
+  fisio: 'Você é um assistente especializado em documentação clínica para fisioterapia.\nTransforme o relato livre em prontuário SOAP seguindo diretrizes do COFFITO.\nUse linguagem técnica e objetiva. Sinalize com [verificar] quando houver incerteza.\nResponda SOMENTE em JSON sem markdown:\n{"S":"Subjetivo: queixas, sintomas relatados, evolução desde última sessão","O":"Objetivo: achados do exame físico, testes, observações clínicas","A":"Avaliação: análise clínica, diagnóstico funcional","P":"Plano: conduta realizada, técnicas, objetivos próximas sessões, orientações"}',
+  pilates: 'Você é um assistente especializado em documentação clínica para Pilates clínico.\nTransforme o relato livre em prontuário SOAP adaptado para Pilates clínico.\nMencione equipamentos (Reformer, Cadillac, Mat) quando inferível.\nResponda SOMENTE em JSON sem markdown:\n{"S":"Subjetivo: queixas, nível de dor, relato da semana, resposta à sessão anterior","O":"Objetivo: exercícios realizados, equipamentos, séries/repetições, observações posturais","A":"Avaliação: evolução em relação ao objetivo, padrões compensatórios","P":"Plano: progressão proposta, próxima sessão, orientações domiciliares"}',
+  estetica: 'Você é um assistente especializado em documentação clínica para fisioterapia estética e dermatofuncional.\nTransforme o relato livre em prontuário SOAP para estética facial.\nUse terminologia dermatofuncional correta.\nResponda SOMENTE em JSON sem markdown:\n{"S":"Subjetivo: queixas estéticas, expectativas, reações desde última sessão","O":"Objetivo: avaliação da pele, procedimentos realizados, parâmetros utilizados","A":"Avaliação: resposta ao tratamento, evolução do quadro estético","P":"Plano: próximo protocolo, cuidados pós-procedimento, orientações"}',
+  posop: 'Você é um assistente especializado em documentação clínica para fisioterapia pós-operatória.\nTransforme o relato livre em prontuário SOAP para reabilitação pós-cirúrgica.\nResponda SOMENTE em JSON sem markdown:\n{"S":"Subjetivo: queixas de dor (EVA), limitações funcionais, atividades, medicações","O":"Objetivo: avaliação de edema, ADM, força, cicatriz, recursos utilizados","A":"Avaliação: fase de reabilitação, evolução funcional, aderência ao protocolo","P":"Plano: próxima fase, metas funcionais, exercícios progressivos, restrições"}'
 };
 
-const specLabels = {
-  fisio: 'Fisioterapia reabilitadora',
-  pilates: 'Pilates clínico',
-  estetica: 'Estética facial / Dermatofuncional',
-  posop: 'Fisioterapia pós-operatória'
-};
+var specLabels = { fisio:'Fisioterapia reabilitadora', pilates:'Pilates clínico', estetica:'Estética facial / Dermatofuncional', posop:'Fisioterapia pós-operatória' };
+var soapLabels = { S:'S — Subjetivo', O:'O — Objetivo', A:'A — Avaliação', P:'P — Plano' };
 
-const soapLabels = { S: 'S — Subjetivo', O: 'O — Objetivo', A: 'A — Avaliação', P: 'P — Plano' };
-
-// ── Suporte a voz ──
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 if (!SpeechRecognition) {
   document.getElementById('noSupportWarn').style.display = 'block';
   document.getElementById('recordBtn').disabled = true;
@@ -431,21 +190,18 @@ if (!SpeechRecognition) {
 }
 
 function selectSpec(btn) {
-  document.querySelectorAll('.spec-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.spec-btn').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
   selectedSpec = btn.dataset.spec;
 }
 
-// ── Gravação (sem continuous — evita duplicação) ──
 function toggleRecording() {
-  if (!isRecording) startRecording();
-  else stopRecording();
+  if (!isRecording) startRecording(); else stopRecording();
 }
 
 function startRecording() {
   isRecording = true;
   accumulatedText = document.getElementById('inputText').value.trim();
-
   document.getElementById('recordZone').classList.add('recording');
   document.getElementById('recordBtn').classList.add('recording');
   document.getElementById('recordBtnText').textContent = '⏹ Parar gravação';
@@ -462,54 +218,40 @@ function launchSession() {
   recognition.continuous = false;
   recognition.interimResults = true;
   recognition.maxAlternatives = 1;
+  var sessionFinal = '';
 
-  let sessionFinal = '';
-
-  recognition.onresult = (event) => {
+  recognition.onresult = function(event) {
     sessionFinal = '';
-    let interim = '';
-    for (let i = 0; i < event.results.length; i++) {
-      if (event.results[i].isFinal) {
-        sessionFinal += event.results[i][0].transcript + ' ';
-      } else {
-        interim += event.results[i][0].transcript;
-      }
+    var interim = '';
+    for (var i = 0; i < event.results.length; i++) {
+      if (event.results[i].isFinal) sessionFinal += event.results[i][0].transcript + ' ';
+      else interim += event.results[i][0].transcript;
     }
-    const preview = applyCorrections((sessionFinal + interim).trim());
-    const base = accumulatedText ? accumulatedText + ' ' : '';
+    var preview = applyCorrections((sessionFinal + interim).trim());
+    var base = accumulatedText ? accumulatedText + ' ' : '';
     document.getElementById('inputText').value = base + preview;
   };
 
-  recognition.onend = () => {
+  recognition.onend = function() {
     if (sessionFinal.trim()) {
-      const corrected = applyCorrections(sessionFinal.trim());
+      var corrected = applyCorrections(sessionFinal.trim());
       accumulatedText += (accumulatedText ? ' ' : '') + corrected;
       document.getElementById('inputText').value = accumulatedText;
     }
-    if (isRecording) {
-      setTimeout(() => { if (isRecording) launchSession(); }, 100);
-    }
+    if (isRecording) setTimeout(function(){ if (isRecording) launchSession(); }, 100);
   };
 
-  recognition.onerror = (e) => {
-    if (e.error === 'not-allowed') {
-      showError('Permissão de microfone negada. Permita o acesso nas configurações do navegador.');
-      stopRecording();
-    } else if (e.error !== 'no-speech' && e.error !== 'aborted') {
-      console.warn('Speech error:', e.error);
-    }
+  recognition.onerror = function(e) {
+    if (e.error === 'not-allowed') { showError('Permissão de microfone negada.'); stopRecording(); }
+    else if (e.error !== 'no-speech' && e.error !== 'aborted') console.warn('Speech error:', e.error);
   };
 
-  try { recognition.start(); } catch(e) { console.warn('Falha ao iniciar sessão:', e); }
+  try { recognition.start(); } catch(e) { console.warn('Falha ao iniciar:', e); }
 }
 
 function stopRecording() {
   isRecording = false;
-  if (recognition) {
-    recognition.onend = null;
-    try { recognition.stop(); } catch(e) {}
-    recognition = null;
-  }
+  if (recognition) { recognition.onend = null; try { recognition.stop(); } catch(e){} recognition = null; }
   stopTimer();
   document.getElementById('recordZone').classList.remove('recording');
   document.getElementById('recordBtn').classList.remove('recording');
@@ -522,60 +264,38 @@ function stopRecording() {
 
 function startTimer() {
   timerSeconds = 0;
-  timerInterval = setInterval(() => {
+  timerInterval = setInterval(function(){
     timerSeconds++;
-    const m = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
-    const s = String(timerSeconds % 60).padStart(2, '0');
-    document.getElementById('recordTimer').textContent = `⏱ ${m}:${s}`;
+    var m = String(Math.floor(timerSeconds/60)).padStart(2,'0');
+    var s = String(timerSeconds%60).padStart(2,'0');
+    document.getElementById('recordTimer').textContent = '⏱ '+m+':'+s;
   }, 1000);
 }
 
 function stopTimer() {
-  clearInterval(timerInterval);
-  timerSeconds = 0;
+  clearInterval(timerInterval); timerSeconds = 0;
   document.getElementById('recordTimer').textContent = '';
 }
 
-// ── Gerar prontuário via Netlify Function ──
 async function generateProntuario() {
-  const text = document.getElementById('inputText').value.trim();
-  if (!text || text.length < 20) {
-    showError('Por favor, descreva a sessão com pelo menos algumas frases.');
-    return;
-  }
-
-  hideError();
-  showLoading(true);
-  hideOutput();
+  var text = document.getElementById('inputText').value.trim();
+  if (!text || text.length < 20) { showError('Por favor, descreva a sessão com pelo menos algumas frases.'); return; }
+  hideError(); showLoading(true); hideOutput();
   document.getElementById('generateBtn').disabled = true;
-
   try {
-    const response = await fetch('/.netlify/functions/gerar-prontuario', {
+    var response = await fetch('/.netlify/functions/gerar-prontuario', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        texto: text,
-        systemPrompt: systemPrompts[selectedSpec]
-      })
+      body: JSON.stringify({ texto: text, systemPrompt: systemPrompts[selectedSpec] })
     });
-
-    const data = await response.json();
-
-    if (!response.ok || data.erro) {
-      throw new Error(data.erro || 'Erro ao gerar prontuário.');
-    }
-
-    let soap;
-    try {
-      soap = JSON.parse(data.resultado.replace(/```json|```/g, '').trim());
-    } catch {
-      throw new Error('Formato inesperado da IA. Tente novamente.');
-    }
-
+    var data = await response.json();
+    if (!response.ok || data.erro) throw new Error(data.erro || 'Erro ao gerar prontuário.');
+    var soap;
+    try { soap = JSON.parse(data.resultado.replace(/```json|```/g,'').trim()); }
+    catch(e) { throw new Error('Formato inesperado da IA. Tente novamente.'); }
     renderProntuario(soap);
-
-  } catch (err) {
-    showError(err.message || 'Erro de conexão. Verifique sua internet e tente novamente.');
+  } catch(err) {
+    showError(err.message || 'Erro de conexão. Verifique sua internet.');
   } finally {
     showLoading(false);
     document.getElementById('generateBtn').disabled = false;
@@ -583,248 +303,152 @@ async function generateProntuario() {
 }
 
 function renderProntuario(soap) {
-  const now = new Date();
-  document.getElementById('outDate').textContent = now.toLocaleDateString('pt-BR', {
-    day: '2-digit', month: 'long', year: 'numeric'
-  });
+  var now = new Date();
+  document.getElementById('outDate').textContent = now.toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
   document.getElementById('outSpec').textContent = specLabels[selectedSpec];
-
-  const content = document.getElementById('prontuarioContent');
+  var content = document.getElementById('prontuarioContent');
   content.innerHTML = '';
-  ['S','O','A','P'].forEach(key => {
+  ['S','O','A','P'].forEach(function(key){
     if (!soap[key]) return;
-    const block = document.createElement('div');
+    var block = document.createElement('div');
     block.className = 'prontuario-block';
-    block.innerHTML = `<div class="soap-label">${soapLabels[key]}</div><div class="soap-content">${soap[key]}</div>`;
+    block.innerHTML = '<div class="soap-label">'+soapLabels[key]+'</div><div class="soap-content">'+soap[key]+'</div>';
     content.appendChild(block);
   });
-
   document.getElementById('outputArea').classList.add('visible');
-  document.getElementById('outputArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.getElementById('outputArea').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function showLoading(show) { document.getElementById('loadingArea').classList.toggle('visible', show); }
 function hideOutput() { document.getElementById('outputArea').classList.remove('visible'); }
-
-function showError(msg) {
-  const box = document.getElementById('errorBox');
-  box.textContent = '⚠️ ' + msg;
-  box.classList.add('visible');
-}
+function showError(msg) { var b=document.getElementById('errorBox'); b.textContent='⚠️ '+msg; b.classList.add('visible'); }
 function hideError() { document.getElementById('errorBox').classList.remove('visible'); }
 
-function copyProntuario() {
-  const blocks = document.querySelectorAll('.prontuario-block');
-  let text = `PRONTUÁRIO — ${specLabels[selectedSpec]}\nData: ${document.getElementById('outDate').textContent}\n\n`;
-  blocks.forEach(b => {
-    text += `${b.querySelector('.soap-label').textContent}\n${b.querySelector('.soap-content').textContent}\n\n`;
-  });
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = event.target;
-    btn.textContent = '✓ Copiado!';
-    setTimeout(() => btn.textContent = '📋 Copiar tudo', 2000);
-  });
-}
-
-// ── Logo em base64 (carregada uma vez) ──
-let logoBase64 = null;
-
-async function getLogoBase64() {
-  if (logoBase64) return logoBase64;
-  const response = await fetch('logo.png');
-  const blob = await response.blob();
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      logoBase64 = reader.result.split(',')[1];
-      resolve(logoBase64);
-    };
-    reader.readAsDataURL(blob);
-  });
-}
-
-// ── Baixar Word ──
-async function downloadWord() {
-  const btn = event.target;
-  btn.textContent = '⏳ Gerando...';
-  btn.disabled = true;
-
-  try {
-    const blocks = document.querySelectorAll('.prontuario-block');
-    const spec = specLabels[selectedSpec];
-    const dateStr = document.getElementById('outDate').textContent;
-
-    if (!window.docx) {
-      await loadScript('https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js');
-    }
-
-    const { Document, Paragraph, TextRun, ImageRun, AlignmentType, Packer, BorderStyle, Table, TableRow, TableCell, WidthType, VerticalAlign } = window.docx;
-
-    // Tenta carregar a logo
-    let logoImgRun = null;
-    try {
-      const b64 = await getLogoBase64();
-      const binaryStr = atob(b64);
-      const bytes = new Uint8Array(binaryStr.length);
-      for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
-      logoImgRun = new ImageRun({
-        data: bytes.buffer,
-        transformation: { width: 70, height: 70 },
-        type: 'png'
-      });
-    } catch(e) { console.warn('Logo não carregada:', e); }
-
-    const children = [];
-
-    // ── Cabeçalho com logo + dados da clínica ──
-    if (logoImgRun) {
-      const headerTable = new Table({
-        width: { size: 100, type: WidthType.PERCENTAGE },
-        borders: {
-          top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.SINGLE, size: 2, color: '8B7355' },
-          left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE },
-          insideH: { style: BorderStyle.NONE }, insideV: { style: BorderStyle.NONE }
-        },
-        rows: [
-          new TableRow({
-            children: [
-              // Coluna logo
-              new TableCell({
-                width: { size: 15, type: WidthType.PERCENTAGE },
-                verticalAlign: VerticalAlign.CENTER,
-                borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } },
-                children: [new Paragraph({ children: [logoImgRun], alignment: AlignmentType.CENTER })]
-              }),
-              // Coluna dados
-              new TableCell({
-                width: { size: 85, type: WidthType.PERCENTAGE },
-                verticalAlign: VerticalAlign.CENTER,
-                borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } },
-                children: [
-                  new Paragraph({ children: [new TextRun({ text: 'Studio Pérola', bold: true, size: 30, color: '5C4A2A' })], alignment: AlignmentType.LEFT }),
-                  new Paragraph({ children: [new TextRun({ text: 'Fisioterapia · Pilates Clínico · Estética Facial', size: 20, color: '8B7355' })], alignment: AlignmentType.LEFT }),
-                  new Paragraph({ children: [new TextRun({ text: 'Jéssica Nunes Rohrs  |  WhatsApp: (49) 98841-8667', size: 19, color: '666666' })], alignment: AlignmentType.LEFT, spacing: { before: 60 } }),
-                ]
-              })
-            ]
-          })
-        ]
-      });
-      children.push(headerTable);
-    } else {
-      // Cabeçalho sem logo
-      children.push(
-        new Paragraph({ children: [new TextRun({ text: 'Studio Pérola', bold: true, size: 30, color: '5C4A2A' })], alignment: AlignmentType.CENTER }),
-        new Paragraph({ children: [new TextRun({ text: 'Fisioterapia · Pilates Clínico · Estética Facial', size: 20, color: '8B7355' })], alignment: AlignmentType.CENTER }),
-        new Paragraph({ children: [new TextRun({ text: 'Jéssica Nunes Rohrs  |  WhatsApp: (49) 98841-8667', size: 19, color: '666666' })], alignment: AlignmentType.CENTER })
-      );
-    }
-
-    // Título do documento
-    children.push(
-      new Paragraph({ spacing: { before: 300 } }),
-      new Paragraph({
-        children: [new TextRun({ text: 'PRONTUÁRIO DE EVOLUÇÃO', bold: true, size: 26, color: '2d6a4f' })],
-        alignment: AlignmentType.CENTER,
-        spacing: { after: 100 }
-      }),
-      new Paragraph({
-        children: [
-          new TextRun({ text: `${spec}`, size: 20, color: '555555' }),
-          new TextRun({ text: `   |   `, size: 20, color: 'aaaaaa' }),
-          new TextRun({ text: `Data: ${dateStr}`, size: 20, color: '555555' })
-        ],
-        alignment: AlignmentType.CENTER,
-        spacing: { after: 360 }
-      })
-    );
-
-    // ── Seções SOAP ──
-    const soapColors = { S: '1a5276', O: '1e8449', A: '6e2f8a', P: 'b03a2e' };
-    const soapFull  = { S: 'S — SUBJETIVO', O: 'O — OBJETIVO', A: 'A — AVALIAÇÃO', P: 'P — PLANO' };
-
-    blocks.forEach(block => {
-      const labelText   = block.querySelector('.soap-label').textContent.trim();
-      const contentText = block.querySelector('.soap-content').textContent.trim();
-      const key   = labelText.charAt(0);
-      const color = soapColors[key] || '333333';
-
-      children.push(
-        new Paragraph({
-          children: [new TextRun({ text: soapFull[key] || labelText, bold: true, size: 22, color })],
-          spacing: { before: 280, after: 80 },
-          border: { bottom: { style: BorderStyle.SINGLE, size: 1, color: 'dddddd' } }
-        }),
-        new Paragraph({
-          children: [new TextRun({ text: contentText, size: 21 })],
-          spacing: { after: 160 }
-        })
-      );
-    });
-
-    // ── Rodapé / Assinatura ──
-    children.push(
-      new Paragraph({
-        children: [new TextRun({ text: ' ', size: 20 })],
-        spacing: { before: 500 },
-        border: { top: { style: BorderStyle.SINGLE, size: 1, color: 'cccccc' } }
-      }),
-      new Paragraph({
-        children: [new TextRun({ text: 'Assinatura do profissional: ________________________________', size: 20, color: '555555' })],
-        spacing: { before: 200 }
-      }),
-      new Paragraph({
-        children: [new TextRun({ text: 'Jéssica Nunes Rohrs — Fisioterapeuta', size: 19, color: '777777' })],
-        spacing: { before: 80 }
-      }),
-      new Paragraph({
-        children: [new TextRun({ text: 'Saudades, Santa Catarina', size: 18, color: '999999' })],
-        spacing: { before: 60 },
-        alignment: AlignmentType.CENTER
-      })
-    );
-
-    const doc = new Document({
-      sections: [{
-        properties: { page: { margin: { top: 1000, right: 1100, bottom: 1000, left: 1100 } } },
-        children
-      }]
-    });
-
-    const blob = await Packer.toBlob(doc);
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    const dateClean = new Date().toISOString().slice(0, 10);
-    a.href     = url;
-    a.download = `prontuario_${selectedSpec}_${dateClean}.docx`;
-    a.click();
-    URL.revokeObjectURL(url);
-
-    btn.textContent = '✓ Baixado!';
-    setTimeout(() => { btn.textContent = '📄 Baixar Word'; btn.disabled = false; }, 2000);
-
-  } catch (err) {
-    console.error(err);
-    btn.textContent = '📄 Baixar Word';
-    btn.disabled = false;
-    showError('Erro ao gerar o Word. Tente novamente.');
-  }
+function feedback(type) {
+  var row = document.querySelector('.feedback-row');
+  row.innerHTML = type==='sim'
+    ? '<span style="color:#2d6a4f;font-size:14px;font-weight:500">✅ Ótimo! Esse resultado é a base do produto.</span>'
+    : '<span style="color:#856404;font-size:14px">📝 Anote o que estava errado ou faltando.</span>';
 }
 
 function loadScript(src) {
-  return new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    s.src = src;
-    s.onload = resolve;
-    s.onerror = reject;
+  return new Promise(function(resolve, reject){
+    var s = document.createElement('script');
+    s.src = src; s.onload = resolve; s.onerror = reject;
     document.head.appendChild(s);
   });
 }
 
-  const row = document.querySelector('.feedback-row');
-  row.innerHTML = type === 'sim'
-    ? '<span style="color:#2d6a4f;font-size:14px;font-weight:500">✅ Ótimo! Esse resultado é a base do produto.</span>'
-    : '<span style="color:#856404;font-size:14px">📝 Anote o que estava errado ou faltando — isso vira refinamento do prompt.</span>';
+async function getLogoBase64() {
+  if (logoBase64) return logoBase64;
+  var response = await fetch('logo.png');
+  var blob = await response.blob();
+  return new Promise(function(resolve){
+    var reader = new FileReader();
+    reader.onloadend = function(){ logoBase64 = reader.result.split(',')[1]; resolve(logoBase64); };
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function downloadWord() {
+  var btn = event.target;
+  btn.textContent = '⏳ Gerando...';
+  btn.disabled = true;
+  try {
+    var blocks = document.querySelectorAll('.prontuario-block');
+    var spec = specLabels[selectedSpec];
+    var dateStr = document.getElementById('outDate').textContent;
+    if (!window.docx) await loadScript('https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js');
+
+    var D = window.docx;
+    var { Document, Paragraph, TextRun, ImageRun, AlignmentType, Packer, BorderStyle, Table, TableRow, TableCell, WidthType, VerticalAlign } = D;
+
+    var logoImgRun = null;
+    try {
+      var b64 = await getLogoBase64();
+      var binaryStr = atob(b64);
+      var bytes = new Uint8Array(binaryStr.length);
+      for (var i=0;i<binaryStr.length;i++) bytes[i]=binaryStr.charCodeAt(i);
+      logoImgRun = new ImageRun({ data: bytes.buffer, transformation: {width:70,height:70}, type:'png' });
+    } catch(e) { console.warn('Logo não carregada:', e); }
+
+    var children = [];
+
+    if (logoImgRun) {
+      var headerTable = new Table({
+        width: {size:100,type:WidthType.PERCENTAGE},
+        borders: {
+          top:{style:BorderStyle.NONE}, bottom:{style:BorderStyle.SINGLE,size:2,color:'8B7355'},
+          left:{style:BorderStyle.NONE}, right:{style:BorderStyle.NONE},
+          insideH:{style:BorderStyle.NONE}, insideV:{style:BorderStyle.NONE}
+        },
+        rows: [new TableRow({ children: [
+          new TableCell({
+            width:{size:15,type:WidthType.PERCENTAGE}, verticalAlign:VerticalAlign.CENTER,
+            borders:{top:{style:BorderStyle.NONE},bottom:{style:BorderStyle.NONE},left:{style:BorderStyle.NONE},right:{style:BorderStyle.NONE}},
+            children:[new Paragraph({children:[logoImgRun],alignment:AlignmentType.CENTER})]
+          }),
+          new TableCell({
+            width:{size:85,type:WidthType.PERCENTAGE}, verticalAlign:VerticalAlign.CENTER,
+            borders:{top:{style:BorderStyle.NONE},bottom:{style:BorderStyle.NONE},left:{style:BorderStyle.NONE},right:{style:BorderStyle.NONE}},
+            children:[
+              new Paragraph({children:[new TextRun({text:'Studio Pérola',bold:true,size:30,color:'5C4A2A'})],alignment:AlignmentType.LEFT}),
+              new Paragraph({children:[new TextRun({text:'Fisioterapia · Pilates Clínico · Estética Facial',size:20,color:'8B7355'})],alignment:AlignmentType.LEFT}),
+              new Paragraph({children:[new TextRun({text:'Jéssica Nunes Rohrs  |  WhatsApp: (49) 98841-8667',size:19,color:'666666'})],alignment:AlignmentType.LEFT,spacing:{before:60}})
+            ]
+          })
+        ]})]
+      });
+      children.push(headerTable);
+    } else {
+      children.push(
+        new Paragraph({children:[new TextRun({text:'Studio Pérola',bold:true,size:30,color:'5C4A2A'})],alignment:AlignmentType.CENTER}),
+        new Paragraph({children:[new TextRun({text:'Fisioterapia · Pilates Clínico · Estética Facial',size:20,color:'8B7355'})],alignment:AlignmentType.CENTER}),
+        new Paragraph({children:[new TextRun({text:'Jéssica Nunes Rohrs  |  WhatsApp: (49) 98841-8667',size:19,color:'666666'})],alignment:AlignmentType.CENTER})
+      );
+    }
+
+    children.push(
+      new Paragraph({spacing:{before:300}}),
+      new Paragraph({children:[new TextRun({text:'PRONTUÁRIO DE EVOLUÇÃO',bold:true,size:26,color:'2d6a4f'})],alignment:AlignmentType.CENTER,spacing:{after:100}}),
+      new Paragraph({children:[new TextRun({text:spec+' · Data: '+dateStr,size:20,color:'555555'})],alignment:AlignmentType.CENTER,spacing:{after:360}})
+    );
+
+    var soapColors = {S:'1a5276',O:'1e8449',A:'6e2f8a',P:'b03a2e'};
+    var soapFull   = {S:'S — SUBJETIVO',O:'O — OBJETIVO',A:'A — AVALIAÇÃO',P:'P — PLANO'};
+
+    blocks.forEach(function(block){
+      var labelText   = block.querySelector('.soap-label').textContent.trim();
+      var contentText = block.querySelector('.soap-content').textContent.trim();
+      var key   = labelText.charAt(0);
+      var color = soapColors[key] || '333333';
+      children.push(
+        new Paragraph({children:[new TextRun({text:soapFull[key]||labelText,bold:true,size:22,color:color})],spacing:{before:280,after:80},border:{bottom:{style:BorderStyle.SINGLE,size:1,color:'dddddd'}}}),
+        new Paragraph({children:[new TextRun({text:contentText,size:21})],spacing:{after:160}})
+      );
+    });
+
+    children.push(
+      new Paragraph({children:[new TextRun({text:' ',size:20})],spacing:{before:500},border:{top:{style:BorderStyle.SINGLE,size:1,color:'cccccc'}}}),
+      new Paragraph({children:[new TextRun({text:'Assinatura: ________________________________',size:20,color:'555555'})],spacing:{before:200}}),
+      new Paragraph({children:[new TextRun({text:'Jéssica Nunes Rohrs — Fisioterapeuta',size:19,color:'777777'})],spacing:{before:80}}),
+      new Paragraph({children:[new TextRun({text:'Saudades, Santa Catarina',size:18,color:'999999'})],spacing:{before:60},alignment:AlignmentType.CENTER})
+    );
+
+    var doc = new Document({sections:[{properties:{page:{margin:{top:1000,right:1100,bottom:1000,left:1100}}},children:children}]});
+    var blob = await Packer.toBlob(doc);
+    var url  = URL.createObjectURL(blob);
+    var a    = document.createElement('a');
+    var dateClean = new Date().toISOString().slice(0,10);
+    a.href = url; a.download = 'prontuario_'+selectedSpec+'_'+dateClean+'.docx'; a.click();
+    URL.revokeObjectURL(url);
+    btn.textContent = '✓ Baixado!';
+    setTimeout(function(){ btn.textContent='📄 Baixar Word'; btn.disabled=false; }, 2000);
+  } catch(err) {
+    console.error(err);
+    btn.textContent = '📄 Baixar Word'; btn.disabled = false;
+    showError('Erro ao gerar o Word. Tente novamente.');
+  }
 }
 </script>
 </body>
