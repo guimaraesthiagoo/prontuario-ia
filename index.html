@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prontuário IA</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2ee;
+    --surface: #ffffff;
+    --surface2: #f0ece6;
+    --accent: #2d6a4f;
+    --accent2: #40916c;
+    --accent-light: #d8f3dc;
+    --text: #1a1a1a;
+    --text-muted: #6b6560;
+    --border: #e0d9d0;
+    --red: #c1440e;
+    --shadow: 0 2px 20px rgba(0,0,0,0.06);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: var(--accent);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 18px;
+  }
+
+  .logo-text { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--accent); }
+  .logo-sub { font-size: 12px; color: var(--text-muted); }
+
+  .badge-proto {
+    margin-left: auto;
+    background: #fff3cd; color: #856404;
+    font-size: 11px; font-weight: 600;
+    padding: 4px 10px; border-radius: 20px;
+    border: 1px solid #ffc107;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 36px 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  @media (max-width: 680px) {
+    .container { grid-template-columns: 1fr; padding: 20px 16px; }
+    header { padding: 14px 16px; }
+  }
+
+  .card {
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+
+  .card.full-width { grid-column: 1 / -1; }
+
+  .card-title { font-family: 'DM Serif Display', serif; font-size: 17px; margin-bottom: 6px; }
+  .card-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
+
+  .specialty-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+  .spec-btn {
+    padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface2);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; cursor: pointer;
+    transition: all 0.15s;
+    text-align: left; color: var(--text); font-weight: 500;
+  }
+
+  .spec-btn:hover { border-color: var(--accent2); background: var(--accent-light); }
+  .spec-btn.active { border-color: var(--accent); background: var(--accent-light); color: var(--accent); }
+  .spec-btn .spec-icon { display: block; font-size: 18px; margin-bottom: 4px; }
+
+  .label {
+    font-size: 12px; font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.6px;
+    margin-bottom: 8px; display: block;
+  }
+
+  .record-zone {
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    margin-bottom: 14px;
+    transition: all 0.2s;
+    background: var(--surface2);
+  }
+
+  .record-zone.recording {
+    border-color: var(--red);
+    background: #fff5f5;
+    animation: pulse-border 1.2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-border {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(193,68,14,0.15); }
+    50% { box-shadow: 0 0 0 6px rgba(193,68,14,0); }
+  }
+
+  .record-btn {
+    display: inline-flex;
+    align-items: center; gap: 10px;
+    padding: 13px 28px;
+    border-radius: 50px; border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
+    background: var(--accent); color: white;
+    box-shadow: 0 4px 14px rgba(45,106,79,0.3);
+  }
+
+  .record-btn:hover { background: var(--accent2); transform: translateY(-1px); }
+  .record-btn.recording {
+    background: var(--red);
+    box-shadow: 0 4px 14px rgba(193,68,14,0.3);
+    animation: pulse-btn 1.2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-btn {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+  }
+
+  .mic-dot { width: 10px; height: 10px; border-radius: 50%; background: white; }
+  .mic-dot.active { animation: blink 0.8s ease-in-out infinite; }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+  .record-status { font-size: 12px; color: var(--text-muted); margin-top: 10px; min-height: 18px; }
+  .record-status.active { color: var(--red); font-weight: 500; }
+  .record-timer { font-size: 11px; color: var(--text-muted); margin-top: 4px; font-variant-numeric: tabular-nums; }
+
+  .or-divider {
+    display: flex; align-items: center; gap: 10px;
+    margin: 14px 0; font-size: 12px; color: var(--text-muted);
+  }
+  .or-divider::before, .or-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  textarea {
+    width: 100%; min-height: 100px;
+    padding: 14px;
+    border: 1.5px solid var(--border); border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; line-height: 1.6;
+    resize: vertical; background: var(--surface2); color: var(--text);
+    transition: border-color 0.15s;
+  }
+  textarea:focus { outline: none; border-color: var(--accent2); background: white; }
+  textarea::placeholder { color: #bbb; }
+
+  .hint { font-size: 12px; color: var(--text-muted); margin-top: 8px; line-height: 1.5; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 24px; border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s; border: none;
+  }
+  .btn-primary {
+    background: var(--accent); color: white;
+    width: 100%; justify-content: center; margin-top: 16px;
+  }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
+  .btn-primary:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+  .btn-secondary {
+    background: var(--surface2); color: var(--text);
+    border: 1.5px solid var(--border); font-size: 13px; padding: 8px 16px;
+  }
+  .btn-secondary:hover { background: var(--accent-light); border-color: var(--accent2); }
+
+  .output-area { display: none; }
+  .output-area.visible { display: block; }
+
+  .prontuario-block { margin-bottom: 20px; }
+
+  .soap-label {
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px;
+    color: var(--accent); margin-bottom: 6px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .soap-label::after { content: ''; flex: 1; height: 1px; background: var(--accent-light); }
+
+  .soap-content {
+    font-size: 14px; line-height: 1.7; color: var(--text);
+    background: var(--surface2); padding: 12px 14px;
+    border-radius: 8px; border-left: 3px solid var(--accent-light);
+    white-space: pre-wrap;
+  }
+
+  .output-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
+  }
+  .output-meta { font-size: 12px; color: var(--text-muted); }
+  .output-meta strong { color: var(--text); font-weight: 600; }
+
+  .loading { display: none; text-align: center; padding: 40px 20px; color: var(--text-muted); }
+  .loading.visible { display: block; }
+  .spinner {
+    width: 32px; height: 32px;
+    border: 3px solid var(--accent-light); border-top-color: var(--accent);
+    border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { font-size: 14px; font-style: italic; }
+
+  .error-box {
+    display: none; background: #fff5f5; border: 1px solid #fca5a5;
+    border-radius: 8px; padding: 12px 16px;
+    font-size: 13px; color: var(--red); margin-top: 12px;
+  }
+  .error-box.visible { display: block; }
+
+  .feedback-row {
+    display: flex; gap: 8px; margin-top: 16px;
+    padding-top: 16px; border-top: 1px solid var(--border); align-items: center;
+  }
+  .feedback-label { font-size: 13px; color: var(--text-muted); flex: 1; }
+  .feedback-btn {
+    padding: 6px 14px; border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: white; font-size: 13px; cursor: pointer; transition: all 0.15s;
+  }
+  .feedback-btn.ok:hover { background: var(--accent-light); border-color: var(--accent); }
+  .feedback-btn.nok:hover { background: #fff5f5; border-color: var(--red); }
+
+  .info-box {
+    background: var(--accent-light); border-radius: 10px;
+    padding: 14px 16px; font-size: 13px; color: #1b4332; line-height: 1.6;
+  }
+  .info-box strong { font-weight: 600; }
+
+  .no-support {
+    background: #fff3cd; border: 1px solid #ffc107;
+    border-radius: 8px; padding: 10px 14px;
+    font-size: 13px; color: #856404; margin-bottom: 12px; display: none;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-icon">🩺</div>
+  <div>
+    <div class="logo-text">ProntuárioIA</div>
+    <div class="logo-sub">Protótipo de validação</div>
+  </div>
+  <span class="badge-proto">⚠️ MVP — Uso interno</span>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <div class="card-title">Área de atendimento</div>
+    <div class="card-desc">Selecione a especialidade da sessão para adaptar o prontuário.</div>
+    <div class="specialty-grid">
+      <button class="spec-btn active" data-spec="fisio" onclick="selectSpec(this)">
+        <span class="spec-icon">🦴</span>Fisioterapia reabilitadora
+      </button>
+      <button class="spec-btn" data-spec="pilates" onclick="selectSpec(this)">
+        <span class="spec-icon">🧘</span>Pilates clínico
+      </button>
+      <button class="spec-btn" data-spec="estetica" onclick="selectSpec(this)">
+        <span class="spec-icon">✨</span>Estética facial
+      </button>
+      <button class="spec-btn" data-spec="posop" onclick="selectSpec(this)">
+        <span class="spec-icon">🏥</span>Pós-operatório
+      </button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Relato da sessão</div>
+    <div class="card-desc">Grave sua voz ou cole o texto da sessão abaixo.</div>
+
+    <div class="no-support" id="noSupportWarn">
+      ⚠️ Seu navegador não suporta reconhecimento de voz. Use Chrome ou Edge.
+    </div>
+
+    <div class="record-zone" id="recordZone">
+      <button class="record-btn" id="recordBtn" onclick="toggleRecording()">
+        <div class="mic-dot" id="micDot"></div>
+        <span id="recordBtnText">🎙️ Iniciar gravação</span>
+      </button>
+      <div class="record-status" id="recordStatus">Clique para falar livremente sobre a sessão</div>
+      <div class="record-timer" id="recordTimer"></div>
+    </div>
+
+    <div class="or-divider">ou cole/digite o texto</div>
+
+    <label class="label">Texto da sessão</label>
+    <textarea id="inputText" placeholder="Ex: Paciente chegou relatando melhora da dor lombar, conseguiu realizar atividades domésticas sem dor. Realizamos mobilização de L4-L5 e exercícios de estabilização..."></textarea>
+    <p class="hint">💡 Fale como se descrevesse a sessão para um colega. A IA estrutura o SOAP automaticamente.</p>
+
+    <div class="error-box" id="errorBox"></div>
+    <button class="btn btn-primary" id="generateBtn" onclick="generateProntuario()">
+      ✦ Gerar Prontuário SOAP
+    </button>
+  </div>
+
+  <div class="card full-width loading" id="loadingArea">
+    <div class="spinner"></div>
+    <div class="loading-text">Estruturando prontuário com IA...</div>
+  </div>
+
+  <div class="card full-width output-area" id="outputArea">
+    <div class="output-header">
+      <div class="output-meta">
+        <strong id="outSpec">Fisioterapia reabilitadora</strong> &nbsp;·&nbsp;
+        <span id="outDate"></span>
+      </div>
+      <button class="btn btn-secondary" style="font-size:12px;padding:6px 14px" onclick="copyProntuario()">📋 Copiar tudo</button>
+    </div>
+    <div id="prontuarioContent"></div>
+    <div class="feedback-row">
+      <span class="feedback-label">O prontuário gerado foi útil?</span>
+      <button class="feedback-btn ok" onclick="feedback('sim')">👍 Sim</button>
+      <button class="feedback-btn nok" onclick="feedback('nao')">👎 Ajustar</button>
+    </div>
+  </div>
+
+  <div class="card full-width">
+    <div class="info-box">
+      <strong>Como usar para validar:</strong> Grave 5 sessões reais falando livremente. O texto aparece automaticamente no campo. Clique em gerar e avalie se o prontuário seria utilizável. Use 👍 / 👎 para registrar a reação.
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── Estado ──
+let selectedSpec = 'fisio';
+let isRecording = false;
+let recognition = null;
+let timerInterval = null;
+let timerSeconds = 0;
+let accumulatedText = '';
+
+// ── Correções de termos técnicos ──
+const termCorrections = {
+  'helicóptero l5': 'L4-L5', 'helicóptero l 5': 'L4-L5', 'helicóptero': 'L4-L5',
+  'l 4 l 5': 'L4-L5', 'l4 l5': 'L4-L5',
+  'l 5 s 1': 'L5-S1', 'l5 s1': 'L5-S1',
+  'c 5 c 6': 'C5-C6', 'c5 c6': 'C5-C6',
+  'a d m': 'ADM', 'amplitude de movimento': 'ADM',
+  'ultra som': 'ultrassom', 'f e s': 'FES',
+  'p g r': 'PGR', 'nr 1': 'NR-1',
+};
+
+function applyCorrections(text) {
+  let result = text;
+  for (const [wrong, right] of Object.entries(termCorrections)) {
+    result = result.replace(new RegExp(wrong, 'gi'), right);
+  }
+  return result;
+}
+
+// ── Prompts por especialidade ──
+const systemPrompts = {
+  fisio: `Você é um assistente especializado em documentação clínica para fisioterapia.
+Transforme o relato livre em prontuário SOAP seguindo diretrizes do COFFITO.
+Use linguagem técnica e objetiva. Sinalize com [verificar] quando houver incerteza.
+Responda SOMENTE em JSON sem markdown:
+{"S":"Subjetivo: queixas, sintomas relatados, evolução desde última sessão","O":"Objetivo: achados do exame físico, testes, observações clínicas","A":"Avaliação: análise clínica, diagnóstico funcional","P":"Plano: conduta realizada, técnicas, objetivos próximas sessões, orientações"}`,
+
+  pilates: `Você é um assistente especializado em documentação clínica para Pilates clínico.
+Transforme o relato livre em prontuário SOAP adaptado para Pilates clínico.
+Mencione equipamentos (Reformer, Cadillac, Mat) quando inferível.
+Responda SOMENTE em JSON sem markdown:
+{"S":"Subjetivo: queixas, nível de dor, relato da semana, resposta à sessão anterior","O":"Objetivo: exercícios realizados, equipamentos, séries/repetições, observações posturais","A":"Avaliação: evolução em relação ao objetivo, padrões compensatórios","P":"Plano: progressão proposta, próxima sessão, orientações domiciliares"}`,
+
+  estetica: `Você é um assistente especializado em documentação clínica para fisioterapia estética e dermatofuncional.
+Transforme o relato livre em prontuário SOAP para estética facial.
+Use terminologia dermatofuncional correta.
+Responda SOMENTE em JSON sem markdown:
+{"S":"Subjetivo: queixas estéticas, expectativas, reações desde última sessão","O":"Objetivo: avaliação da pele, procedimentos realizados, parâmetros utilizados","A":"Avaliação: resposta ao tratamento, evolução do quadro estético","P":"Plano: próximo protocolo, cuidados pós-procedimento, orientações"}`,
+
+  posop: `Você é um assistente especializado em documentação clínica para fisioterapia pós-operatória.
+Transforme o relato livre em prontuário SOAP para reabilitação pós-cirúrgica.
+Responda SOMENTE em JSON sem markdown:
+{"S":"Subjetivo: queixas de dor (EVA), limitações funcionais, atividades, medicações","O":"Objetivo: avaliação de edema, ADM, força, cicatriz, recursos utilizados","A":"Avaliação: fase de reabilitação, evolução funcional, aderência ao protocolo","P":"Plano: próxima fase, metas funcionais, exercícios progressivos, restrições"}`
+};
+
+const specLabels = {
+  fisio: 'Fisioterapia reabilitadora',
+  pilates: 'Pilates clínico',
+  estetica: 'Estética facial / Dermatofuncional',
+  posop: 'Fisioterapia pós-operatória'
+};
+
+const soapLabels = { S: 'S — Subjetivo', O: 'O — Objetivo', A: 'A — Avaliação', P: 'P — Plano' };
+
+// ── Suporte a voz ──
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (!SpeechRecognition) {
+  document.getElementById('noSupportWarn').style.display = 'block';
+  document.getElementById('recordBtn').disabled = true;
+  document.getElementById('recordBtn').style.opacity = '0.4';
+}
+
+function selectSpec(btn) {
+  document.querySelectorAll('.spec-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedSpec = btn.dataset.spec;
+}
+
+// ── Gravação (sem continuous — evita duplicação) ──
+function toggleRecording() {
+  if (!isRecording) startRecording();
+  else stopRecording();
+}
+
+function startRecording() {
+  isRecording = true;
+  accumulatedText = document.getElementById('inputText').value.trim();
+
+  document.getElementById('recordZone').classList.add('recording');
+  document.getElementById('recordBtn').classList.add('recording');
+  document.getElementById('recordBtnText').textContent = '⏹ Parar gravação';
+  document.getElementById('micDot').className = 'mic-dot active';
+  document.getElementById('recordStatus').textContent = 'Gravando... fale livremente sobre a sessão';
+  document.getElementById('recordStatus').classList.add('active');
+  startTimer();
+  launchSession();
+}
+
+function launchSession() {
+  recognition = new SpeechRecognition();
+  recognition.lang = 'pt-BR';
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  recognition.maxAlternatives = 1;
+
+  let sessionFinal = '';
+
+  recognition.onresult = (event) => {
+    sessionFinal = '';
+    let interim = '';
+    for (let i = 0; i < event.results.length; i++) {
+      if (event.results[i].isFinal) {
+        sessionFinal += event.results[i][0].transcript + ' ';
+      } else {
+        interim += event.results[i][0].transcript;
+      }
+    }
+    const preview = applyCorrections((sessionFinal + interim).trim());
+    const base = accumulatedText ? accumulatedText + ' ' : '';
+    document.getElementById('inputText').value = base + preview;
+  };
+
+  recognition.onend = () => {
+    if (sessionFinal.trim()) {
+      const corrected = applyCorrections(sessionFinal.trim());
+      accumulatedText += (accumulatedText ? ' ' : '') + corrected;
+      document.getElementById('inputText').value = accumulatedText;
+    }
+    if (isRecording) {
+      setTimeout(() => { if (isRecording) launchSession(); }, 100);
+    }
+  };
+
+  recognition.onerror = (e) => {
+    if (e.error === 'not-allowed') {
+      showError('Permissão de microfone negada. Permita o acesso nas configurações do navegador.');
+      stopRecording();
+    } else if (e.error !== 'no-speech' && e.error !== 'aborted') {
+      console.warn('Speech error:', e.error);
+    }
+  };
+
+  try { recognition.start(); } catch(e) { console.warn('Falha ao iniciar sessão:', e); }
+}
+
+function stopRecording() {
+  isRecording = false;
+  if (recognition) {
+    recognition.onend = null;
+    try { recognition.stop(); } catch(e) {}
+    recognition = null;
+  }
+  stopTimer();
+  document.getElementById('recordZone').classList.remove('recording');
+  document.getElementById('recordBtn').classList.remove('recording');
+  document.getElementById('recordBtnText').textContent = '🎙️ Iniciar gravação';
+  document.getElementById('micDot').className = 'mic-dot';
+  document.getElementById('recordStatus').textContent = 'Gravação concluída ✓ — revise o texto e clique em Gerar';
+  document.getElementById('recordStatus').classList.remove('active');
+  document.getElementById('recordStatus').style.color = 'var(--accent)';
+}
+
+function startTimer() {
+  timerSeconds = 0;
+  timerInterval = setInterval(() => {
+    timerSeconds++;
+    const m = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+    const s = String(timerSeconds % 60).padStart(2, '0');
+    document.getElementById('recordTimer').textContent = `⏱ ${m}:${s}`;
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+  timerSeconds = 0;
+  document.getElementById('recordTimer').textContent = '';
+}
+
+// ── Gerar prontuário via Netlify Function ──
+async function generateProntuario() {
+  const text = document.getElementById('inputText').value.trim();
+  if (!text || text.length < 20) {
+    showError('Por favor, descreva a sessão com pelo menos algumas frases.');
+    return;
+  }
+
+  hideError();
+  showLoading(true);
+  hideOutput();
+  document.getElementById('generateBtn').disabled = true;
+
+  try {
+    const response = await fetch('/.netlify/functions/gerar-prontuario', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        texto: text,
+        systemPrompt: systemPrompts[selectedSpec]
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || data.erro) {
+      throw new Error(data.erro || 'Erro ao gerar prontuário.');
+    }
+
+    let soap;
+    try {
+      soap = JSON.parse(data.resultado.replace(/```json|```/g, '').trim());
+    } catch {
+      throw new Error('Formato inesperado da IA. Tente novamente.');
+    }
+
+    renderProntuario(soap);
+
+  } catch (err) {
+    showError(err.message || 'Erro de conexão. Verifique sua internet e tente novamente.');
+  } finally {
+    showLoading(false);
+    document.getElementById('generateBtn').disabled = false;
+  }
+}
+
+function renderProntuario(soap) {
+  const now = new Date();
+  document.getElementById('outDate').textContent = now.toLocaleDateString('pt-BR', {
+    day: '2-digit', month: 'long', year: 'numeric'
+  });
+  document.getElementById('outSpec').textContent = specLabels[selectedSpec];
+
+  const content = document.getElementById('prontuarioContent');
+  content.innerHTML = '';
+  ['S','O','A','P'].forEach(key => {
+    if (!soap[key]) return;
+    const block = document.createElement('div');
+    block.className = 'prontuario-block';
+    block.innerHTML = `<div class="soap-label">${soapLabels[key]}</div><div class="soap-content">${soap[key]}</div>`;
+    content.appendChild(block);
+  });
+
+  document.getElementById('outputArea').classList.add('visible');
+  document.getElementById('outputArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showLoading(show) { document.getElementById('loadingArea').classList.toggle('visible', show); }
+function hideOutput() { document.getElementById('outputArea').classList.remove('visible'); }
+
+function showError(msg) {
+  const box = document.getElementById('errorBox');
+  box.textContent = '⚠️ ' + msg;
+  box.classList.add('visible');
+}
+function hideError() { document.getElementById('errorBox').classList.remove('visible'); }
+
+function copyProntuario() {
+  const blocks = document.querySelectorAll('.prontuario-block');
+  let text = `PRONTUÁRIO — ${specLabels[selectedSpec]}\nData: ${document.getElementById('outDate').textContent}\n\n`;
+  blocks.forEach(b => {
+    text += `${b.querySelector('.soap-label').textContent}\n${b.querySelector('.soap-content').textContent}\n\n`;
+  });
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    btn.textContent = '✓ Copiado!';
+    setTimeout(() => btn.textContent = '📋 Copiar tudo', 2000);
+  });
+}
+
+function feedback(type) {
+  const row = document.querySelector('.feedback-row');
+  row.innerHTML = type === 'sim'
+    ? '<span style="color:#2d6a4f;font-size:14px;font-weight:500">✅ Ótimo! Esse resultado é a base do produto.</span>'
+    : '<span style="color:#856404;font-size:14px">📝 Anote o que estava errado ou faltando — isso vira refinamento do prompt.</span>';
+}
+</script>
+</body>
+</html>
