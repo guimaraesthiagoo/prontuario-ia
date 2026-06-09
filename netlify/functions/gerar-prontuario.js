@@ -23,12 +23,23 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         model: 'gpt-4o',
         max_tokens: 1000,
+        response_format: { type: 'json_object' },
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Relato da sessão:\n\n${texto}` }
         ]
       })
     });
+
+    if (!response.ok) {
+      const err = await response.text();
+      console.error('OpenAI error:', err);
+      return {
+        statusCode: 502,
+        headers: { 'Access-Control-Allow-Origin': '*' },
+        body: JSON.stringify({ erro: 'Erro ao chamar a API de IA. Tente novamente.' })
+      };
+    }
 
     const data = await response.json();
     const resultado = data.choices?.[0]?.message?.content || '';
@@ -40,10 +51,11 @@ exports.handler = async (event) => {
     };
 
   } catch (e) {
+    console.error('Function error:', e);
     return {
       statusCode: 500,
       headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ erro: 'Erro interno.' })
+      body: JSON.stringify({ erro: 'Erro interno. Tente novamente.' })
     };
   }
 };
